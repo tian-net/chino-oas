@@ -20,10 +20,25 @@ kubectl apply -f frontend-service.yaml
 ## 3. Verificar
 ```bash
 kubectl get all -n elchino
+# Esperar hasta que todos los pods estén en "Running"
 ```
 
-## 4. Acceder
+## 4. Exponer servicios (Minikube)
+```bash
+kubectl port-forward -n elchino service/frontend-service 30080:80 --address 0.0.0.0 &
+kubectl port-forward -n elchino service/backend-service 30001:30001 --address 0.0.0.0 &
 ```
-Frontend: http://IP_PUBLICA_EC2:30080
-Backend:  http://IP_PUBLICA_EC2:30001/api/events
+
+## 5. Acceder
+```
+Frontend:  http://IP_PUBLICA_EC2:30080
+Backend:   http://IP_PUBLICA_EC2:30001/api/events
+Swagger:   http://IP_PUBLICA_EC2:30001/swagger-ui.html
+```
+
+## Expandir volumen EBS (si hay errores de espacio)
+```bash
+sudo growpart /dev/nvme0n1 1
+sudo resize2fs /dev/nvme0n1p1
+df -h
 ```
