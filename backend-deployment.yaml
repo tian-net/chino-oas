@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: elchino
+  labels:
+    app: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: tian11qb/sebastian-webflux-nosql:lastest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8087
+          env:
+            - name: DATABASE_NAME
+              value: "elchino"
+            - name: DATABASE_URI
+              value: "mongodb://mongo-service.elchino.svc.cluster.local:27017/elchino"
